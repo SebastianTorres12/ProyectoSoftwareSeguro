@@ -9,9 +9,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableMethodSecurity
@@ -21,13 +18,12 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable()) // Deshabilita CSRF
+                .cors(cors -> cors.disable()) // Deshabilita CORS (puedes activarlo si lo necesitas)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/usuarios/**").permitAll() // Rutas públicas
-                        .requestMatchers("/api/prestamos/**").hasAnyRole("USUARIO", "ADMIN") // Rutas protegidas
-                        .requestMatchers("/api/cuotas/**").hasRole("ADMIN") // Rutas solo para ADMIN
-                        .anyRequest().authenticated() // Otras rutas requieren autenticación
+                        .anyRequest().permitAll() // 🔥 Permite TODAS las rutas sin autenticación
                 )
-                .httpBasic(withDefaults()); // Usar autenticación básica
+                .httpBasic(httpBasic -> httpBasic.disable()) // Deshabilita autenticación básica
+                .formLogin(form -> form.disable()); // Deshabilita formulario de login
 
         return http.build();
     }

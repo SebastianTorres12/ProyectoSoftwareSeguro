@@ -16,5 +16,6 @@ public interface CuotaRepository extends JpaRepository<Cuota, Long> {
     /**
      * Contar cuotas pendientes de un préstamo.
      */
-    long countByPrestamo_IdPrestamoAndEstado(Long idPrestamo, String estado);
+    long countByPrestamo_IdPrestamoAndEsPagada(Long idPrestamo, Boolean esPagada);
+
 }

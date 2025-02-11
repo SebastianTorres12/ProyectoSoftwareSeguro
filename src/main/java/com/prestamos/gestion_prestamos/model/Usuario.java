@@ -57,5 +57,101 @@ public class Usuario {
     }
 
     public Usuario(){}
+
+    public Long getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Long idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getNombreCompleto() {
+        return nombreCompleto;
+    }
+
+    public void setNombreCompleto(String nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public String getNumeroId() {
+        return numeroId;
+    }
+
+    public void setNumeroId(String numeroId) {
+        this.numeroId = numeroId;
+    }
+
+    public LocalDate getFechaNac() {
+        return fechaNac;
+    }
+
+    public void setFechaNac(LocalDate fechaNac) {
+        this.fechaNac = fechaNac;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public Double getIngresos() {
+        return ingresos;
+    }
+
+    public void setIngresos(Double ingresos) {
+        this.ingresos = ingresos;
+    }
+
+    public String getHistorialCred() {
+        return historialCred;
+    }
+
+    public void setHistorialCred(String historialCred) {
+        this.historialCred = historialCred;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getContrasenaHash() {
+        return contrasenaHash;
+    }
+
+    public void setContrasenaHash(String contrasenaHash) {
+        this.contrasenaHash = contrasenaHash;
+    }
+
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+
+    public Integer getIntentosFallidos() {
+        return intentosFallidos;
+    }
+
+    public void setIntentosFallidos(Integer intentosFallidos) {
+        this.intentosFallidos = intentosFallidos;
+    }
+
+    public Boolean getCuentaBloqueada() {
+        return cuentaBloqueada;
+    }
+
+    public void setCuentaBloqueada(Boolean cuentaBloqueada) {
+        this.cuentaBloqueada = cuentaBloqueada;
+    }
 }
 

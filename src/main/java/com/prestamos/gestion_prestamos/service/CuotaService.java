@@ -28,12 +28,12 @@ public class CuotaService {
         Cuota cuota = cuotaRepository.findById(idCuota)
                 .orElseThrow(() -> new RuntimeException("Cuota no encontrada con ID: " + idCuota));
 
-        if ("PAGADA".equalsIgnoreCase(cuota.getEstado())) {
+        if (Boolean.TRUE.equals(cuota.getEsPagada())) {
             throw new RuntimeException("La cuota ya ha sido pagada.");
         }
 
-        cuota.setEstado("PAGADA");
-        cuota.setFechaPago(LocalDate.now());
+        // Usamos el método del modelo para marcarla como pagada
+        cuota.marcarComoPagada();
         cuotaRepository.save(cuota);
     }
 }

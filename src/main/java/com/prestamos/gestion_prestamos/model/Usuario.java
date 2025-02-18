@@ -1,6 +1,7 @@
 package com.prestamos.gestion_prestamos.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,7 +32,7 @@ public class Usuario {
 
     private String correo;
 
-    @JsonIgnore
+    @JsonProperty("contrasenaHash")
     private String contrasenaHash;
 
     @Enumerated(EnumType.STRING)

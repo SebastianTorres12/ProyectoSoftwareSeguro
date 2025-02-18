@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -51,7 +52,13 @@ public class UsuarioController {
      * Endpoint para desbloquear una cuenta de usuario.
      */
     @PostMapping("/desbloquear")
-    public ResponseEntity<String> desbloquearCuenta(@RequestParam String correo) {
+    public ResponseEntity<String> desbloquearCuenta(@RequestBody Map<String, String> request) {
+        String correo = request.get("correo");
+
+        if (correo == null || correo.isEmpty()) {
+            return ResponseEntity.badRequest().body("El campo 'correo' es obligatorio.");
+        }
+
         try {
             usuarioService.desbloquearCuenta(correo);
             return ResponseEntity.ok("Cuenta desbloqueada exitosamente.");
@@ -64,10 +71,17 @@ public class UsuarioController {
      * Endpoint para autenticar un usuario (puede integrarse con JWT).
      */
     @PostMapping("/login")
-    public ResponseEntity<String> autenticar(@RequestParam String correo, @RequestParam String contrasena) {
+    public ResponseEntity<String> autenticar(@RequestBody Map<String, String> request) {
+        String correo = request.get("correo");
+        String contrasena = request.get("contrasena");
+
+        if (correo == null || contrasena == null || correo.isEmpty() || contrasena.isEmpty()) {
+            return ResponseEntity.badRequest().body("Correo y contraseña son obligatorios.");
+        }
+
         try {
-            usuarioService.autenticarUsuario(correo, contrasena);
-            return ResponseEntity.ok("Inicio de sesión exitoso.");
+            String token = usuarioService.autenticarUsuario(correo, contrasena);
+            return ResponseEntity.ok(token); //  Retorna el token JWT
         } catch (RuntimeException ex) {
             return ResponseEntity.badRequest().body(ex.getMessage());
         }

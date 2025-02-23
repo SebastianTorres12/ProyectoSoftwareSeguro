@@ -71,19 +71,22 @@ public class UsuarioController {
      * Endpoint para autenticar un usuario (puede integrarse con JWT).
      */
     @PostMapping("/login")
-    public ResponseEntity<String> autenticar(@RequestBody Map<String, String> request) {
+    public ResponseEntity<Map<String, String>> autenticar(@RequestBody Map<String, String> request) {
         String correo = request.get("correo");
         String contrasena = request.get("contrasena");
 
         if (correo == null || contrasena == null || correo.isEmpty() || contrasena.isEmpty()) {
-            return ResponseEntity.badRequest().body("Correo y contraseña son obligatorios.");
+            return ResponseEntity.badRequest().body(Map.of("error", "Correo y contraseña son obligatorios."));
         }
 
         try {
             String token = usuarioService.autenticarUsuario(correo, contrasena);
-            return ResponseEntity.ok(token); //  Retorna el token JWT
+
+            // Retorna el token dentro de un JSON válido
+            return ResponseEntity.ok(Map.of("token", token));
         } catch (RuntimeException ex) {
-            return ResponseEntity.badRequest().body(ex.getMessage());
+            return ResponseEntity.badRequest().body(Map.of("error", ex.getMessage()));
         }
     }
+
 }

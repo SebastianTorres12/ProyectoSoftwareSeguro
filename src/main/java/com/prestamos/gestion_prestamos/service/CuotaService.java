@@ -28,12 +28,30 @@ public class CuotaService {
         Cuota cuota = cuotaRepository.findById(idCuota)
                 .orElseThrow(() -> new RuntimeException("Cuota no encontrada con ID: " + idCuota));
 
-        if (Boolean.TRUE.equals(cuota.getEsPagada())) {
+        if ("Pagada".equals(cuota.getEstado())) {
             throw new RuntimeException("La cuota ya ha sido pagada.");
         }
 
-        // Usamos el método del modelo para marcarla como pagada
+        // Si la cuota está vencida, actualizar el interés por mora antes del pago
+        if ("Mora".equals(cuota.getEstado())) {
+            cuota.actualizarInteresMora();
+        }
+
+        // Marcar como pagada
         cuota.marcarComoPagada();
         cuotaRepository.save(cuota);
+    }
+
+    /**
+     * Verificar y actualizar cuotas en mora de un préstamo.
+     */
+    public void verificarYActualizarMoras(Long idPrestamo) {
+        List<Cuota> cuotas = cuotaRepository.findByPrestamo_IdPrestamo(idPrestamo);
+        for (Cuota cuota : cuotas) {
+            if ("Pendiente".equals(cuota.getEstado()) && LocalDate.now().isAfter(cuota.getFechaVencimiento())) {
+                cuota.verificarMora();
+                cuotaRepository.save(cuota);
+            }
+        }
     }
 }

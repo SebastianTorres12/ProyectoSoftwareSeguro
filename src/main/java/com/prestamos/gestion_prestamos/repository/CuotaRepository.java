@@ -8,14 +8,19 @@ import java.util.List;
 
 @Repository
 public interface CuotaRepository extends JpaRepository<Cuota, Long> {
+
     /**
-     * Buscar cuotas por el ID del préstamo.
+     * Buscar todas las cuotas de un préstamo.
      */
     List<Cuota> findByPrestamo_IdPrestamo(Long idPrestamo);
 
     /**
-     * Contar cuotas pendientes de un préstamo.
+     * Contar cuotas por estado en un préstamo.
      */
-    long countByPrestamo_IdPrestamoAndEsPagada(Long idPrestamo, Boolean esPagada);
+    long countByPrestamo_IdPrestamoAndEstado(Long idPrestamo, String estado);
 
+    /**
+     * Buscar cuotas por estado en un préstamo.
+     */
+    List<Cuota> findByPrestamo_IdPrestamoAndEstado(Long idPrestamo, String estado);
 }

@@ -21,18 +21,22 @@ public class PrestamoController {
      */
     @PreAuthorize("hasRole('USUARIO')")
     @PostMapping
-    public ResponseEntity<Prestamo> crearPrestamo(@RequestBody Prestamo prestamo) {
-        Prestamo nuevoPrestamo = prestamoService.crearPrestamo(prestamo);
-        return ResponseEntity.ok(nuevoPrestamo);
+    public ResponseEntity<?> crearPrestamo(@RequestBody Prestamo prestamo) {
+        try {
+            Prestamo nuevoPrestamo = prestamoService.crearPrestamo(prestamo);
+            return ResponseEntity.ok(nuevoPrestamo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     /**
-     * Obtener todos los préstamos de un usuario (solo admins pueden ver de todos los usuarios).
+     * Obtener todos los préstamos de un usuario por su cédula (solo admins pueden ver de todos los usuarios).
      */
     @PreAuthorize("hasRole('ADMIN')")
-    @GetMapping("/usuario/{idUsuario}")
-    public ResponseEntity<List<Prestamo>> obtenerPrestamosPorUsuario(@PathVariable Long idUsuario) {
-        List<Prestamo> prestamos = prestamoService.obtenerPrestamosPorUsuario(idUsuario);
+    @GetMapping("/usuario/{cedula}")
+    public ResponseEntity<List<Prestamo>> obtenerPrestamosPorCedula(@PathVariable String cedula) {
+        List<Prestamo> prestamos = prestamoService.obtenerPrestamosPorCedula(cedula);
         return ResponseEntity.ok(prestamos);
     }
 
@@ -41,8 +45,26 @@ public class PrestamoController {
      */
     @PreAuthorize("hasRole('USUARIO') or hasRole('ADMIN')")
     @GetMapping("/{idPrestamo}")
-    public ResponseEntity<Prestamo> obtenerPrestamoPorId(@PathVariable Long idPrestamo) {
-        Prestamo prestamo = prestamoService.obtenerPrestamoPorId(idPrestamo);
-        return ResponseEntity.ok(prestamo);
+    public ResponseEntity<?> obtenerPrestamoPorId(@PathVariable Long idPrestamo) {
+        try {
+            Prestamo prestamo = prestamoService.obtenerPrestamoPorId(idPrestamo);
+            return ResponseEntity.ok(prestamo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    /**
+     * Cambiar el estado de un préstamo (solo Admin).
+     */
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/{idPrestamo}/estado")
+    public ResponseEntity<?> cambiarEstadoPrestamo(@PathVariable Long idPrestamo, @RequestParam String nuevoEstado) {
+        try {
+            Prestamo prestamoActualizado = prestamoService.cambiarEstadoPrestamo(idPrestamo, nuevoEstado);
+            return ResponseEntity.ok(prestamoActualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

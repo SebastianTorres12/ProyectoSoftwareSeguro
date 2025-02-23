@@ -8,13 +8,24 @@ import java.util.Optional;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+
     /**
-     * Buscar un usuario por correo.
+     * Buscar usuario por cédula (único).
+     */
+    Optional<Usuario> findByCedula(String cedula);
+
+    /**
+     * Buscar usuario por correo (único).
      */
     Optional<Usuario> findByCorreo(String correo);
 
     /**
-     * Verificar si existe un usuario por correo.
+     * Verificar si un usuario con la cédula dada está bloqueado.
      */
-    boolean existsByCorreo(String correo);
+    boolean existsByCedulaAndCuentaBloqueada(String cedula, Boolean cuentaBloqueada);
+
+    /**
+     * Contar usuarios con un rol específico.
+     */
+    long countByRol(String rol);
 }
